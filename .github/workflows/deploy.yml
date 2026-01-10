@@ -1,0 +1,83 @@
+# 部署文档到 GitHub Pages
+name: Deploy docs
+
+# 触发条件：推送到 main 分支时自动执行
+on:
+  push:
+    branches: [main]
+
+# 并发控制：防止多次推送导致的重复部署
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+# 权限配置：遵循最小权限原则
+permissions:
+  contents: read      # 读取仓库内容
+  pages: write        # 写入 GitHub Pages
+  id-token: write     # OIDC 身份验证
+
+# 环境变量：集中管理配置
+env:
+  NODE_VERSION: 20
+  BUILD_DIR: .vitepress/dist
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 步骤 1：检出代码
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 步骤 2：设置 Node.js 环境
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm  # 启用 npm 缓存，加速依赖安装
+
+      # 步骤 3：安装依赖
+      - name: Install dependencies
+        run: npm ci
+
+      # 步骤 4：构建文档
+      - name: Build docs
+        run: npm run docs:build
+
+      # 步骤 5：验证构建产物
+      - name: Validate build output
+        run: |
+          if [ ! -d "$BUILD_DIR" ]; then
+            echo "错误：构建目录 $BUILD_DIR 不存在"
+            exit 1
+          fi
+          if [ "$(find "$BUILD_DIR" -type f | wc -l)" -eq 0 ]; then
+            echo "错误：构建目录 $BUILD_DIR 为空"
+            exit 1
+          fi
+          echo "构建产物验证通过"
+
+      # 步骤 6：上传构建产物（用于调试）
+      - name: Upload artifact for debugging
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ github.run_number }}
+          path: ${{ env.BUILD_DIR }}
+          if-no-files-found: error
+          retention-days: 7
+
+      # 步骤 7：配置 GitHub Pages
+      - name: Configure Pages
+        uses: actions/configure-pages@v4
+
+      # 步骤 8：上传 Pages 构建产物
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ env.BUILD_DIR }}
+
+      # 步骤 9：部署到 GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

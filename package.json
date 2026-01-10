@@ -1,0 +1,23 @@
+{
+  "name": "sealchat-manual",
+  "version": "1.0.0",
+  "description": "SealChat 使用手册 - 自托管的轻量即时通讯与角色协作平台文档",
+  "type": "module",
+  "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  },
+  "keywords": [
+    "sealchat",
+    "documentation",
+    "trpg",
+    "chat",
+    "manual"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vitepress": "^1.5.0"
+  }
+}
