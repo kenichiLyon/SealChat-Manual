@@ -1,8 +1,8 @@
 # SealChat 使用手册
 
-> 自托管的轻量即时通讯与角色协作平台 - 官方文档
+> 自托管的轻量即时通讯与角色协作平台 - Community Edition
 
-这是 [SealChat](https://github.com/kagangtuya-star/sealchat) 的官方使用手册，基于 VitePress 构建的静态文档网站。
+这是 [SealChat](https://github.com/kagangtuya-star/sealchat) 的社区版使用手册，基于 VitePress 构建的静态文档网站。
 
 ## 在线访问
 
