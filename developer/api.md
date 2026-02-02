@@ -1,3 +1,8 @@
+---
+title: API 参考
+description: 主要接口与认证方式说明
+---
+
 # API 参考
 
 本文档列出 SealChat 的主要 API 接口，供开发者和 Bot 集成使用。

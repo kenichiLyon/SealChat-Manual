@@ -106,7 +106,7 @@ docker run -d \
 | [快速入门](/guide/quick-start) | 新用户 | 部署、注册、创建世界 |
 | [核心概念](/guide/concepts) | 所有用户 | 世界、频道、身份卡、权限 |
 | [功能指南](/guide/features) | 所有用户 | 详细功能使用说明 |
-| [管理员指南](/admin/admin-guide) | 管理员 | 用户管理、Bot、配置 |
+| [管理员指南](/admin/) | 管理员 | 用户管理、Bot、配置 |
 | [配置参考](/reference/configuration) | 运维人员 | 完整配置项说明 |
 | [常见问题](/reference/faq) | 所有用户 | 问题解答与故障排除 |
 

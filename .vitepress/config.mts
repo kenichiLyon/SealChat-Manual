@@ -19,8 +19,40 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: '快速入门', link: '/guide/quick-start' },
-      { text: '功能指南', link: '/guide/features' },
-      { text: '管理员', link: '/admin/admin-guide' },
+      {
+        text: '功能指南',
+        items: [
+          { text: '功能总览', link: '/guide/features' },
+          { text: '新手引导', link: '/guide/features/onboarding' },
+          { text: '消息与聊天', link: '/guide/features/messaging' },
+          { text: '骰子与跑团工具', link: '/guide/features/dice' },
+          { text: '身份卡与角色', link: '/guide/features/identities' },
+          { text: '附件、图库与音频', link: '/guide/features/assets' },
+          { text: '搜索与导出', link: '/guide/features/search-export' },
+          { text: '社交与世界', link: '/guide/features/social' },
+          { text: '协作工具', link: '/guide/features/tools' },
+          { text: '显示与通知设置', link: '/guide/features/settings' },
+          { text: '集成与扩展', link: '/guide/features/integrations' }
+        ]
+      },
+      {
+        text: '管理员',
+        items: [
+          { text: '管理员入门', link: '/admin/' },
+          { text: '用户与 Bot', link: '/admin/user-bot' },
+          { text: '世界与频道', link: '/admin/world-channel' },
+          { text: '系统与存储', link: '/admin/system-storage' },
+          { text: '监控与维护', link: '/admin/maintenance' }
+        ]
+      },
+      {
+        text: '开发集成',
+        items: [
+          { text: 'Webhook 集成', link: '/developer/webhook' },
+          { text: 'SealDice 对接', link: '/developer/sealdice' },
+          { text: 'API 参考', link: '/developer/api' }
+        ]
+      },
       {
         text: '更多',
         items: [
@@ -44,7 +76,17 @@ export default defineConfig({
         {
           text: '功能详解',
           items: [
-            { text: '功能指南', link: '/guide/features' }
+            { text: '功能总览', link: '/guide/features' },
+            { text: '新手引导', link: '/guide/features/onboarding' },
+            { text: '消息与聊天', link: '/guide/features/messaging' },
+            { text: '骰子与跑团工具', link: '/guide/features/dice' },
+            { text: '身份卡与角色', link: '/guide/features/identities' },
+            { text: '附件、图库与音频', link: '/guide/features/assets' },
+            { text: '搜索与导出', link: '/guide/features/search-export' },
+            { text: '社交与世界', link: '/guide/features/social' },
+            { text: '协作工具', link: '/guide/features/tools' },
+            { text: '显示与通知设置', link: '/guide/features/settings' },
+            { text: '集成与扩展', link: '/guide/features/integrations' }
           ]
         }
       ],
@@ -52,7 +94,21 @@ export default defineConfig({
         {
           text: '管理员指南',
           items: [
-            { text: '管理员入门', link: '/admin/admin-guide' }
+            { text: '管理员入门', link: '/admin/' },
+            { text: '用户与 Bot', link: '/admin/user-bot' },
+            { text: '世界与频道', link: '/admin/world-channel' },
+            { text: '系统与存储', link: '/admin/system-storage' },
+            { text: '监控与维护', link: '/admin/maintenance' }
+          ]
+        }
+      ],
+      '/developer/': [
+        {
+          text: '开发与集成',
+          items: [
+            { text: 'Webhook 集成', link: '/developer/webhook' },
+            { text: 'SealDice 对接', link: '/developer/sealdice' },
+            { text: 'API 参考', link: '/developer/api' }
           ]
         }
       ],
@@ -61,7 +117,6 @@ export default defineConfig({
           text: '参考文档',
           items: [
             { text: '配置参考', link: '/reference/configuration' },
-            { text: 'API 参考', link: '/reference/api' },
             { text: '常见问题', link: '/reference/faq' }
           ]
         }
@@ -148,6 +203,11 @@ export default defineConfig({
       detailsLabel: '详细信息'
     }
   },
+
+  ignoreDeadLinks: [
+    /http:\/\/localhost:3212\/.*/,
+    /docs\/product-introduction/
+  ],
 
   // 最后更新时间
   lastUpdated: true,
