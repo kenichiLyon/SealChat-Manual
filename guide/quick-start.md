@@ -29,147 +29,103 @@ description: 10 分钟完成部署与基础使用
 
 ## 部署方式
 
-### 方式一：Docker 部署（推荐）
+### Docker Compose 部署（推荐）
 
-Docker 是最简单的部署方式，适合大多数用户。
+使用 Docker 部署是最简单快捷的方式，无需安装依赖。
 
-**1. 安装 Docker**
+**前置条件**：
+- 安装 [Docker](https://docs.docker.com/get-docker/) 和 Docker Compose
+- 确保 3212 端口可用
 
-如果尚未安装 Docker，请访问 [Docker 官网](https://www.docker.com/) 下载安装。
-
-**2. 拉取并运行**
+**快速开始**：
 
 ```bash
 # 拉取最新镜像
 docker pull ghcr.io/kagangtuya-star/sealchat:latest
 
-# 创建并运行容器
-docker run -d \
-  --name sealchat \
+# 创建配置文件（推荐，便于持久化）
+cp config.docker.yaml.example config.yaml
+
+# 启动服务
+docker compose up -d
+
+# 查看日志
+docker compose logs -f sealchat
+```
+
+访问 `http://localhost:3212/`，第一个注册的账号会成为管理员。
+
+**数据持久化目录**：
+
+| 容器路径 | 宿主机路径 | 说明 |
+| --- | --- | --- |
+| `/app/data` | `./data` | 数据库、临时文件、导出任务 |
+| `/app/sealchat-data` | `./sealchat-data` | 上传的附件和音频文件 |
+| `/app/static` | `./static` | 静态资源 |
+| `/app/config.yaml` | `./config.yaml` | 配置文件 |
+
+**更新镜像**：
+
+```bash
+docker compose pull && docker compose up -d
+```
+
+### Docker run 一键启动
+
+如果不使用 Docker Compose，可以直接使用以下命令启动：
+
+```bash
+docker run -d --name sealchat --restart unless-stopped \
+  -u 0:0 \
   -p 3212:3212 \
-  -v sealchat-data:/app/data \
-  -v sealchat-config:/app/config \
+  -v $(pwd)/sealchat/data:/app/data \
+  -v $(pwd)/sealchat/sealchat-data:/app/sealchat-data \
+  -v $(pwd)/sealchat/static:/app/static \
+  -v $(pwd)/sealchat/config.yaml:/app/config.yaml \
+  -e TZ=Asia/Shanghai \
   ghcr.io/kagangtuya-star/sealchat:latest
 ```
 
-**3. 验证运行**
+### PostgreSQL（生产环境推荐）
 
 ```bash
-# 检查容器状态
-docker ps | grep sealchat
+# 1. 创建 .env 文件设置数据库密码
+echo "POSTGRES_PASSWORD=your_secure_password" > .env
 
-# 查看日志
-docker logs sealchat
+# 2. 修改 config.yaml 中的数据库连接
+# dbUrl: postgresql://sealchat:your_secure_password@postgres:5432/sealchat
+
+# 3. 使用生产配置启动
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
-**4. 访问服务**
-
-打开浏览器，访问 `http://localhost:3212`
-
-### 方式二：Docker Compose 部署
-
-适合需要自定义配置的用户。
-
-**1. 创建配置文件**
-
-创建 `docker-compose.yml`：
-
-```yaml
-version: '3.8'
-
-services:
-  sealchat:
-    image: ghcr.io/kagangtuya-star/sealchat:latest
-    container_name: sealchat
-    ports:
-      - "3212:3212"
-    volumes:
-      - ./data:/app/data
-      - ./config:/app/config
-      - ./static:/app/static
-    environment:
-      - TZ=Asia/Shanghai
-    restart: unless-stopped
-```
-
-**2. 启动服务**
-
-```bash
-docker compose up -d
-```
-
-### 方式三：二进制部署
-
-适合不使用 Docker 的环境。
+### 二进制部署
 
 **1. 下载可执行文件**
 
-从 [Release 页面](https://github.com/kagangtuya-star/sealchat/releases) 下载对应系统的文件：
+从 [Release 页面](https://github.com/sealdice/sealchat/releases/tag/dev-release) 下载对应系统的发行包。
 
-- Windows: `sealchat_windows_amd64.exe`
-- Linux: `sealchat_linux_amd64`
-- macOS: `sealchat_darwin_amd64`
+主程序文件名通常为 `sealchat-server`（也可为 `sealchat_server`）：  
+- Windows: `sealchat-server.exe`  
+- Linux/macOS: `sealchat-server`
 
-**2. 赋予执行权限（Linux/macOS）**
+发行包内包含 `bin/<平台目录>/cwebp` 与 `bin/<平台目录>/gif2webp`（以及 `LICENSE`），请保持与主程序同目录。
 
-```bash
-chmod +x sealchat_linux_amd64
-```
+**2. 运行程序**
 
-**3. 运行程序**
+- Windows：双击 `sealchat-server.exe`
+- Linux/macOS：执行 `chmod +x sealchat-server` 后运行 `./sealchat-server`
 
-```bash
-# Linux/macOS
-./sealchat_linux_amd64
+首次运行会生成 `config.yaml` 并初始化数据库，启动后访问 `http://localhost:3212/`。
 
-# Windows
-sealchat_windows_amd64.exe
-```
-
-**4. 首次启动**
-
-程序会自动：
-- 在当前目录创建 `data/` 文件夹存放数据库
-- 生成 `config.yaml` 配置文件
-- 启动 HTTP 服务监听 3212 端口
-
-### 方式四：源码编译
+### 源码编译（开发者）
 
 适合开发者或需要自定义的场景。
 
-**1. 环境准备**
-
-- Go 1.24+
-- Node.js 18+
-- npm 或 pnpm
-
-**2. 克隆仓库**
-
-```bash
-git clone https://github.com/kagangtuya-star/sealchat.git
-cd sealchat
-```
-
-**3. 编译前端**
-
-```bash
-cd ui
-npm install
-npm run build
-cd ..
-```
-
-**4. 编译后端**
-
-```bash
-go build -o sealchat_server ./
-```
-
-**5. 运行**
-
-```bash
-./sealchat_server
-```
+1. 克隆仓库：`git clone https://github.com/kagangtuya-star/sealchat.git`
+2. 编译前端：`cd ui && npm install && npm run build`
+3. 编译后端：`go build -o sealchat_server ./`
+4. 运行：`./sealchat_server`
 
 ---
 
