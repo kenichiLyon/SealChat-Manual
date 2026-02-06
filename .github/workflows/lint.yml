@@ -9,6 +9,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: DavidAnson/markdownlint-cli2-action@v16
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          globs: "**/*.md"
+          version: latest
+          run_install: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - name: Pnpm install
+        run: pnpm install
+      - name: Markdownlint check
+        run: pnpm exec markdownlint-cli2 "**/*.md"
+
+  markdownlint-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+          run_install: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - name: Pnpm install
+        run: pnpm install
+      - name: Markdownlint autocorrect
+        run: pnpm exec markdownlint-cli2 --fix "**/*.md"
+      - name: Ensure no formatting changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "发现 Markdown 自动修复改动，请在本地运行 markdownlint-cli2 --fix 后提交。"
+            git status --porcelain
+            exit 1
+          fi

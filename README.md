@@ -15,18 +15,18 @@
 ### 环境要求
 
 - Node.js 18+
-- npm 或 pnpm
+- pnpm
 
 ### 安装依赖
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 启动开发服务器
 
 ```bash
-npm run docs:dev
+pnpm docs:dev
 ```
 
 然后访问 `http://localhost:5173`
@@ -34,15 +34,15 @@ npm run docs:dev
 ### 构建静态文件
 
 ```bash
-npm run docs:build
+pnpm docs:build
 ```
 
-构建输出在 `.vitepress/dist` 目录。
+构建输出在 `docs` 目录。
 
 ### 预览构建结果
 
 ```bash
-npm run docs:preview
+pnpm docs:preview
 ```
 
 ## 文档结构
@@ -79,39 +79,23 @@ npm run docs:preview
 - Cloudflare Pages
 - 自建 Nginx
 
-### GitHub Pages 示例
+### GitHub Pages（`gh-pages` 分支）
 
 1. 在仓库设置中启用 GitHub Pages
-2. 设置 Source 为 GitHub Actions
-3. 创建 `.github/workflows/deploy.yml`：
+2. 设置 Source 为 “Deploy from a branch”
+3. 选择 `gh-pages` 分支 + `/ (root)`
 
-```yaml
-name: Deploy docs
+工作流由 `.github/workflows/docs.yml` 负责：
 
-on:
-  push:
-    branches: [main]
+- 构建命令：`pnpm docs:build`
+- 输出目录：`docs`
+- 发布分支：`gh-pages`
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-      - run: npm ci
-      - run: npm run docs:build
-      - uses: actions/configure-pages@v4
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: .vitepress/dist
-      - uses: actions/deploy-pages@v4
+### Markdown 格式检查
+
+```bash
+pnpm lint:md
+pnpm lint:md:fix
 ```
 
 ## 贡献指南

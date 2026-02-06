@@ -6,7 +6,9 @@
   "scripts": {
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
-    "docs:preview": "vitepress preview"
+    "docs:preview": "vitepress preview",
+    "lint:md": "markdownlint-cli2 \"**/*.md\"",
+    "lint:md:fix": "markdownlint-cli2 --fix \"**/*.md\""
   },
   "keywords": [
     "sealchat",
