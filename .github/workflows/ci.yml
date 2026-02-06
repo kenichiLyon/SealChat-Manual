@@ -1,28 +1,21 @@
-name: CD
+name: CI
 
 on:
   push:
-    branches: [main]
-
-concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
+    branches-ignore:
+      - main
+  pull_request:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 env:
   NODE_VERSION: 20
   BUILD_DIR: .vitepress/dist
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -51,14 +44,10 @@ jobs:
           fi
           echo "构建产物验证通过"
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
         with:
+          name: docs-build-${{ github.run_number }}
           path: ${{ env.BUILD_DIR }}
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          if-no-files-found: error
+          retention-days: 7
