@@ -88,7 +88,7 @@ description: 部署与使用中的高频问题解答
 
 ### Q: 如何修改默认端口？
 
-**方式一：配置文件**
+#### 方式一：配置文件
 
 编辑 `config.yaml`：
 
@@ -96,7 +96,7 @@ description: 部署与使用中的高频问题解答
 serveAt: ":8080"
 ```
 
-**方式二：Docker 端口映射**
+#### 方式二：Docker 端口映射
 
 ```bash
 docker run -p 8080:3212 ...
@@ -131,7 +131,7 @@ server {
 
 **Caddy 配置示例**：
 
-```
+```caddy
 chat.example.com {
     reverse_proxy localhost:3212
 }

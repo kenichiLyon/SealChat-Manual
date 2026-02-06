@@ -39,7 +39,7 @@ builtInSealBotEnable: true
 ```
 
 | 配置项 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
+| -------- | ------ | -------- | ------ |
 | `serveAt` | string | `:3212` | HTTP 服务监听地址 |
 | `domain` | string | `""` | 外部访问域名 |
 | `dbUrl` | string | `./data/chat.db` | 数据库文件路径 |
@@ -79,7 +79,7 @@ captcha:
 ### 验证码模式
 
 | 模式 | 说明 |
-|------|------|
+| ------ | ------ |
 | `off` | 关闭验证码 |
 | `local` | 使用本地验证码（图形验证码） |
 | `turnstile` | 使用 Cloudflare Turnstile |
@@ -118,7 +118,7 @@ galleryQuotaMB: 100
 ```
 
 | 配置项 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
+| -------- | ------ | -------- | ------ |
 | `imageCompress` | bool | `true` | 自动压缩上传图片 |
 | `imageCompressQuality` | int | `85` | 压缩质量 1-100 |
 | `imageSizeLimit` | int | `8192` | 单图片大小限制（KB） |
@@ -157,7 +157,7 @@ sqlite:
 ### 配置说明
 
 | 配置项 | 默认值 | 说明 |
-|--------|--------|------|
+| -------- | -------- | ------ |
 | `wal` | `true` | WAL 模式提高并发性能 |
 | `busyTimeout` | `10000` | 锁等待超时（毫秒） |
 | `cacheSizeKB` | `512000` | 缓存大小（512MB） |
@@ -286,7 +286,7 @@ export SEALCHAT_S3_SECRET_KEY="your_secret_key"
 ### 兼容的 S3 服务
 
 | 服务 | Endpoint 示例 |
-|------|---------------|
+| ------ | --------------- |
 | AWS S3 | `https://s3.amazonaws.com` |
 | MinIO | `http://localhost:9000` |
 | 腾讯云 COS | `https://cos.ap-guangzhou.myqcloud.com` |
@@ -434,7 +434,7 @@ emailNotification:
 部分敏感配置可以通过环境变量设置：
 
 | 环境变量 | 说明 |
-|----------|------|
+| ---------- | ------ |
 | `SEALCHAT_S3_ACCESS_KEY` | S3 Access Key |
 | `SEALCHAT_S3_SECRET_KEY` | S3 Secret Key |
 | `SEALCHAT_DB_URL` | 数据库连接字符串 |

@@ -14,7 +14,7 @@ description: 10 分钟完成部署与基础使用
 ### 服务端要求
 
 | 项目 | 最低要求 | 推荐配置 |
-|------|----------|----------|
+| ------ | ---------- | ---------- |
 | CPU | 1 核 | 2 核以上 |
 | 内存 | 512 MB | 2 GB 以上 |
 | 磁盘 | 1 GB | 10 GB 以上（视附件存储需求） |
@@ -102,7 +102,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 ### 二进制部署
 
-**1. 下载可执行文件**
+#### 下载可执行文件
 
 从 [Release 页面](https://github.com/sealdice/sealchat/releases/tag/dev-release) 下载对应系统的发行包。
 
@@ -113,7 +113,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 发行包内包含 `bin/<平台目录>/cwebp` 与 `bin/<平台目录>/gif2webp`（以及 `LICENSE`），请保持与主程序同目录。
 
-**2. 运行程序**
+#### 运行程序
 
 - Windows：双击 `sealchat-server.exe`
 - Linux/macOS：执行 `chmod +x sealchat-server` 后运行 `./sealchat-server`
@@ -141,7 +141,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ### 步骤 2：填写注册信息
 
 | 字段 | 说明 |
-|------|------|
+| ------ | ------ |
 | 用户名 | 登录账号，建议使用英文字母和数字 |
 | 密码 | 至少 6 位，建议包含字母和数字 |
 | 确认密码 | 再次输入密码确认 |
@@ -172,7 +172,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ### 步骤 2：填写世界信息
 
 | 字段 | 说明 | 示例 |
-|------|------|------|
+| ------ | ------ | ------ |
 | 世界名称 | 为你的世界起一个名字 | "跑团小队" |
 | 世界描述 | 简单描述世界的用途 | "我们的 TRPG 跑团空间" |
 | 公开状态 | 选择公开或私有 | 私有（需要邀请链接） |
@@ -210,7 +210,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 ### 邀请链接格式
 
-```
+```text
 http://你的域名:3212/invite/XXXXXXXX
 ```
 
@@ -243,7 +243,7 @@ http://你的域名:3212/invite/XXXXXXXX
 ### 快捷操作
 
 | 操作 | 快捷键 |
-|------|--------|
+| ------ | -------- |
 | 发送消息 | `Enter` |
 | 换行 | `Shift + Enter` |
 | 粗体 | `Ctrl + B` |

@@ -2,13 +2,14 @@
 
 > 自托管的轻量即时通讯与角色协作平台 - Community Edition
 
-这是 [SealChat](https://github.com/kagangtuya-star/sealchat) 的社区版使用手册，基于 VitePress 构建的静态文档网站。
+这是 [SealChat](https://github.com/kagangtuya-star/sealchat) 的社区版使用手册，
+基于 VitePress 构建的静态文档网站。
 
 ## 在线访问
 
 文档部署后可在以下地址访问（请根据实际部署情况修改）：
 
-- 生产环境：`https://docs.sealchat.example.com`
+- 预览：`https://kenichilyon.github.io/SealChat-Manual/`
 
 ## 本地开发
 
@@ -23,7 +24,7 @@
 pnpm install
 ```
 
-### 启动开发服务器
+### 测试环境（启动测试服务器预览）
 
 ```bash
 pnpm docs:dev
@@ -31,59 +32,21 @@ pnpm docs:dev
 
 然后访问 `http://localhost:5173`
 
-### 构建静态文件
+### 生产环境（构建静态文件）
 
-```bash
+```
 pnpm docs:build
-```
-
-构建输出在 `docs` 目录。
-
-### 预览构建结果
-
-```bash
-pnpm docs:preview
-```
-
-## 文档结构
-
-```
-.
-├── index.md                    # 首页
-├── guide/                      # 用户指南
-│   ├── quick-start.md          # 快速入门
-│   ├── concepts.md             # 核心概念
-│   └── features.md             # 功能指南
-├── admin/                      # 管理员指南
-│   └── admin-guide.md          # 管理员入门
-├── reference/                  # 参考文档
-│   ├── configuration.md        # 配置参考
-│   ├── api.md                  # API 参考
-│   └── faq.md                  # 常见问题
-├── public/                     # 静态资源
-│   ├── logo.svg                # Logo
-│   └── hero-image.svg          # 首页图片
-└── .vitepress/
-    └── config.mts              # VitePress 配置
 ```
 
 ## 部署
 
-### 静态托管
-
-构建后的文件可以部署到任何静态托管服务：
-
-- GitHub Pages
-- Netlify
-- Vercel
-- Cloudflare Pages
-- 自建 Nginx
+**您可以通过 fork 本仓库并按照如下方式自动部署到您的 GitHub Pages**
 
 ### GitHub Pages（`gh-pages` 分支）
 
-1. 在仓库设置中启用 GitHub Pages
-2. 设置 Source 为 “Deploy from a branch”
-3. 选择 `gh-pages` 分支 + `/ (root)`
+1. 在仓库 `setting` 页面中，左栏找到 `Pages`，启用 GitHub Pages
+2. 在 `Pages` 页面中，选择 `gh-pages` 分支 + `/docs`，点击 `save` 按钮保存
+3. 在 `Actions` 页面中，等待工作流完成，即可在 `gh-pages` 分支中查看部署结果
 
 工作流由 `.github/workflows/docs.yml` 负责：
 
@@ -100,12 +63,12 @@ pnpm lint:md:fix
 
 ## 贡献指南
 
-欢迎贡献文档！请：
+欢迎为 SealChat-Maunal 进行贡献！请：
 
 1. Fork 本仓库
-2. 创建功能分支
-3. 提交修改
-4. 发起 Pull Request
+2. 创建新分支修改而避免使用 `main` 分支修改以影响 commit 以及造成可能的代码冲突
+3. 在您的新分支上提交修改
+4. 向本仓库发起 Pull Request
 
 ### 文档规范
 
