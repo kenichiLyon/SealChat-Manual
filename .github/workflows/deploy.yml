@@ -15,7 +15,7 @@ permissions:
 
 env:
   NODE_VERSION: 20
-  BUILD_DIR: .vitepress/dist
+  BUILD_DIR: docs
 
 jobs:
   build-and-deploy:

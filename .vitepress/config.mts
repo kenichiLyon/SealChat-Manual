@@ -6,6 +6,9 @@ export default defineConfig({
   description: '自托管的轻量即时通讯与角色协作平台',
   lang: 'zh-CN',
 
+  // 构建输出目录
+  outDir: 'docs',
+
   // 基础路径（如果部署到子路径需要修改）
   base: '/',
 
