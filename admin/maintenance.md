@@ -34,6 +34,7 @@ curl http://localhost:3212/status/health
 ```
 
 返回：
+
 ```json
 {
   "status": "ok",
@@ -45,6 +46,7 @@ curl http://localhost:3212/status/health
 ### 日志查看
 
 **Docker 部署**：
+
 ```bash
 docker logs sealchat
 docker logs -f sealchat  # 实时查看
@@ -52,6 +54,7 @@ docker logs -f sealchat  # 实时查看
 
 **二进制部署**：
 日志输出到标准输出，可以重定向到文件：
+
 ```bash
 ./sealchat_server > sealchat.log 2>&1
 ```
@@ -59,6 +62,7 @@ docker logs -f sealchat  # 实时查看
 ## 数据库维护
 
 **备份 SQLite 数据库**：
+
 ```bash
 # 停止服务后复制
 cp ./data/chat.db ./backup/chat_$(date +%Y%m%d).db
@@ -68,6 +72,7 @@ sqlite3 ./data/chat.db ".backup './backup/chat_backup.db'"
 ```
 
 **优化数据库**：
+
 ```bash
 sqlite3 ./data/chat.db "VACUUM;"
 sqlite3 ./data/chat.db "ANALYZE;"
@@ -94,16 +99,19 @@ sqlite3 ./data/chat.db "ANALYZE;"
 ### 处理存储空间不足
 
 1. 检查大文件：
+
    ```bash
    du -sh ./sealchat-data/*
    du -sh ./static/*
    ```
+
 2. 清理过期的导出文件
 3. 考虑迁移到 S3
 
 ### 紧急情况处理
 
 **服务无响应**：
+
 ```bash
 # Docker
 docker restart sealchat
@@ -113,6 +121,7 @@ docker restart sealchat
 ```
 
 **数据库锁定**：
+
 ```bash
 # 检查锁定
 sqlite3 ./data/chat.db ".databases"

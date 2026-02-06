@@ -16,6 +16,7 @@ description: 部署与使用中的高频问题解答
 **可能原因及解决方案**：
 
 1. **服务未启动**
+
    ```bash
    # Docker 检查
    docker ps | grep sealchat
@@ -25,6 +26,7 @@ description: 部署与使用中的高频问题解答
    ```
 
 2. **端口被占用**
+
    ```bash
    # 检查端口占用
    netstat -an | grep 3212
@@ -34,6 +36,7 @@ description: 部署与使用中的高频问题解答
    ```
 
 3. **防火墙限制**
+
    ```bash
    # Linux 开放端口
    sudo ufw allow 3212
@@ -42,6 +45,7 @@ description: 部署与使用中的高频问题解答
    ```
 
 4. **Docker 网络问题**
+
    ```bash
    # 检查容器日志
    docker logs sealchat
@@ -54,22 +58,26 @@ description: 部署与使用中的高频问题解答
 **检查步骤**：
 
 1. 查看详细日志：
+
    ```bash
    docker logs sealchat
    ```
 
 2. 检查挂载目录权限：
+
    ```bash
    ls -la ./data
    chmod 755 ./data
    ```
 
 3. 检查磁盘空间：
+
    ```bash
    df -h
    ```
 
 4. 尝试重新拉取镜像：
+
    ```bash
    docker pull ghcr.io/kagangtuya-star/sealchat:latest
    docker rm sealchat
@@ -83,6 +91,7 @@ description: 部署与使用中的高频问题解答
 **方式一：配置文件**
 
 编辑 `config.yaml`：
+
 ```yaml
 serveAt: ":8080"
 ```
@@ -130,9 +139,11 @@ chat.example.com {
 
 ::: warning 重要
 配置 HTTPS 后，需要更新 `config.yaml` 中的 `domain` 为 HTTPS 地址：
+
 ```yaml
 domain: "https://chat.example.com"
 ```
+
 :::
 
 ---
@@ -144,6 +155,7 @@ domain: "https://chat.example.com"
 **解决方案**：
 
 1. **直接修改数据库**（需要 SQLite 工具）：
+
    ```bash
    # 停止服务
    docker stop sealchat
@@ -161,6 +173,7 @@ domain: "https://chat.example.com"
 
 2. **创建新管理员**：
    - 如果可以访问数据库，可以直接将某用户设为管理员：
+
    ```sql
    UPDATE users SET role='admin' WHERE username='另一个用户';
    ```
@@ -205,6 +218,7 @@ domain: "https://chat.example.com"
 **可能原因**：
 
 1. **域名配置错误**：
+
    ```yaml
    # 确保 domain 配置正确
    domain: "http://localhost:3212"
@@ -224,9 +238,11 @@ domain: "https://chat.example.com"
 
 1. **命令格式**：确保使用正确格式 `.r d20`
 2. **内置 Bot**：检查是否启用了内置骰子 Bot：
+
    ```yaml
    builtInSealBotEnable: true
    ```
+
 3. **频道权限**：某些频道可能禁用了骰子功能
 
 ---
@@ -236,6 +252,7 @@ domain: "https://chat.example.com"
 **可能原因**：
 
 1. **全文搜索需要重建索引**：
+
    ```sql
    -- SQLite 重建 FTS 索引
    INSERT INTO message_search_fts(message_search_fts) VALUES('rebuild');
@@ -268,10 +285,12 @@ domain: "https://chat.example.com"
 
 1. **启用压缩**：通过反向代理启用 gzip
 2. **增加缓存**：
+
    ```yaml
    sqlite:
      cacheSizeKB: 1024000  # 增加到 1GB
    ```
+
 3. **检查网络**：确认服务器带宽充足
 4. **清理数据**：清理不需要的历史数据
 
@@ -292,6 +311,7 @@ domain: "https://chat.example.com"
 **解决方案**：
 
 1. **运行 VACUUM**：
+
    ```bash
    sqlite3 ./data/chat.db "VACUUM;"
    ```
@@ -355,17 +375,20 @@ docker start sealchat
 **迁移步骤**：
 
 1. **备份旧服务器数据**：
+
    ```bash
    tar -czvf sealchat_migration.tar.gz \
        ./data ./sealchat-data ./static ./config.yaml
    ```
 
 2. **传输到新服务器**：
+
    ```bash
    scp sealchat_migration.tar.gz user@newserver:/path/
    ```
 
 3. **在新服务器解压**：
+
    ```bash
    tar -xzvf sealchat_migration.tar.gz
    ```
@@ -375,6 +398,7 @@ docker start sealchat
    - 检查其他路径配置
 
 5. **启动服务**：
+
    ```bash
    docker run -d --name sealchat ...
    ```

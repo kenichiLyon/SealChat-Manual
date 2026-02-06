@@ -34,6 +34,7 @@ description: 10 分钟完成部署与基础使用
 使用 Docker 部署是最简单快捷的方式，无需安装依赖。
 
 **前置条件**：
+
 - 安装 [Docker](https://docs.docker.com/get-docker/) 和 Docker Compose
 - 确保 3212 端口可用
 
@@ -106,6 +107,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 从 [Release 页面](https://github.com/sealdice/sealchat/releases/tag/dev-release) 下载对应系统的发行包。
 
 主程序文件名通常为 `sealchat-server`（也可为 `sealchat_server`）：  
+
 - Windows: `sealchat-server.exe`  
 - Linux/macOS: `sealchat-server`
 
@@ -213,6 +215,7 @@ http://你的域名:3212/invite/XXXXXXXX
 ```
 
 用户点击链接后：
+
 1. 如未登录，会提示先登录或注册
 2. 登录后自动加入世界
 

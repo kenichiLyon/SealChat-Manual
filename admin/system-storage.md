@@ -44,6 +44,7 @@ SealChat 支持三种存储模式：
 ### 本地存储
 
 默认存储位置：
+
 ```
 ./sealchat-data/upload/    # 附件
 ./static/audio/            # 音频
@@ -65,6 +66,7 @@ storage:
 ```
 
 环境变量：
+
 ```bash
 SEALCHAT_S3_ACCESS_KEY=your_access_key
 SEALCHAT_S3_SECRET_KEY=your_secret_key

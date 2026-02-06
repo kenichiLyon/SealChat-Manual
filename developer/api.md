@@ -23,10 +23,12 @@ description: 主要接口与认证方式说明
 ### 认证
 
 **用户认证**：
+
 - 通过登录接口获取 Cookie
 - 后续请求自动携带 Cookie
 
 **Bot 认证**：
+
 ```http
 Authorization: Bearer sc_bot_xxxxxxxx
 ```
@@ -49,6 +51,7 @@ Content-Type: application/json
 ```
 
 **响应**：
+
 ```json
 {
   "code": 0,
@@ -73,6 +76,7 @@ Content-Type: application/json
 ```
 
 **响应**：
+
 ```json
 {
   "code": 0,
@@ -97,6 +101,7 @@ GET /api/user/info
 ```
 
 **响应**：
+
 ```json
 {
   "code": 0,
@@ -142,6 +147,7 @@ GET /api/world
 ```
 
 **响应**：
+
 ```json
 {
   "code": 0,
@@ -207,6 +213,7 @@ GET /api/world/{worldId}/channel
 ```
 
 **响应**：
+
 ```json
 {
   "code": 0,
@@ -264,6 +271,7 @@ GET /api/channel/{channelId}/messages?before={messageId}&limit=50
 ```
 
 **参数**：
+
 | 参数 | 类型 | 说明 |
 |------|------|------|
 | `before` | string | 获取此消息之前的消息 |
@@ -271,6 +279,7 @@ GET /api/channel/{channelId}/messages?before={messageId}&limit=50
 | `limit` | int | 返回数量限制（默认 50） |
 
 **响应**：
+
 ```json
 {
   "code": 0,
@@ -326,6 +335,7 @@ GET /api/message/search?q={query}&worldId={worldId}
 ```
 
 **参数**：
+
 | 参数 | 类型 | 说明 |
 |------|------|------|
 | `q` | string | 搜索关键词 |
@@ -350,6 +360,7 @@ channelId: "channel-id"
 ```
 
 **响应**：
+
 ```json
 {
   "code": 0,
@@ -407,12 +418,14 @@ ws://localhost:3212/api/chat
 ```
 
 **认证**：
+
 - Cookie 自动携带
 - 或通过 URL 参数：`?token=sc_bot_xxx`
 
 ### 消息格式
 
 **发送消息**：
+
 ```json
 {
   "api": "message.send",
@@ -425,6 +438,7 @@ ws://localhost:3212/api/chat
 ```
 
 **接收消息**：
+
 ```json
 {
   "api": "message.new",
@@ -488,6 +502,7 @@ Content-Type: application/json
 ```
 
 **响应**：
+
 ```json
 {
   "code": 0,
@@ -509,6 +524,7 @@ GET /status/health
 ```
 
 **响应**：
+
 ```json
 {
   "status": "ok",
@@ -539,6 +555,7 @@ GET /status
 | 500 | 服务器错误 |
 
 **错误响应格式**：
+
 ```json
 {
   "code": 1001,

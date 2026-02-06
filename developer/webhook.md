@@ -25,6 +25,7 @@ Webhook 集成用于让外部系统与频道双向同步消息。
 外部系统使用 `Authorization: Bearer <token>` 调用 `/api/v1/webhook/channels/:channelId` 相关接口。
 
 **典型能力**：
+
 - 拉取频道消息变更
 - 创建、更新、删除消息
 - 同步外部身份信息

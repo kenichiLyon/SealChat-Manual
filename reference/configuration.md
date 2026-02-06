@@ -14,6 +14,7 @@ description: 全量配置项与示例说明
 SealChat 使用 `config.yaml` 作为主配置文件，首次启动时自动生成。
 
 **配置文件位置**：
+
 - 二进制部署：`./config.yaml`
 - Docker 部署：`/app/config/config.yaml`
 
@@ -201,11 +202,13 @@ audio:
 ### 安装 FFmpeg
 
 **Ubuntu/Debian**：
+
 ```bash
 apt install ffmpeg
 ```
 
 **macOS**：
+
 ```bash
 brew install ffmpeg
 ```
@@ -322,6 +325,7 @@ emailNotification:
 ### SMTP 配置示例
 
 **Gmail**：
+
 ```yaml
 smtp:
   host: "smtp.gmail.com"
@@ -333,6 +337,7 @@ smtp:
 ```
 
 **腾讯企业邮箱**：
+
 ```yaml
 smtp:
   host: "smtp.exmail.qq.com"
