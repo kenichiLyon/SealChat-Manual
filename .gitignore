@@ -26,6 +26,3 @@ npm-debug.log*
 # Temp files
 *.tmp
 *.temp
-
-# Old docs directory (migrated to VitePress structure)
-docs/

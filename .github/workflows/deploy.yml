@@ -9,13 +9,11 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 env:
   NODE_VERSION: 20
-  BUILD_DIR: docs
+  BUILD_DIR: .vitepress/dist
 
 jobs:
   build-and-deploy:
@@ -51,14 +49,10 @@ jobs:
           fi
           echo "构建产物验证通过"
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: ${{ env.BUILD_DIR }}
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ${{ env.BUILD_DIR }}
+          enable_jekyll: false
