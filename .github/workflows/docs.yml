@@ -29,7 +29,9 @@ jobs:
       - name: Build docs
         run: pnpm docs:build
       - name: Add .nojekyll
-        run: touch .vitepress/dist/.nojekyll
+        run: |
+          mkdir -p .vitepress/dist
+          touch .vitepress/dist/.nojekyll
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v4
         with:
