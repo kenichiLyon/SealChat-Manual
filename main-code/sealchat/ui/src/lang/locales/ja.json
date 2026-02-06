@@ -1,0 +1,87 @@
+{
+  "headText": "SealChat",
+  "channelListNew": "新規",
+  "dialoChannelgNew": {
+    "title": "新しいチャンネル",
+    "channelNamePlaceholder": "チャンネル名を入力してください",
+    "channelNameHint": "チャンネル名は空にできません",
+    "positiveText": "確認",
+    "negativeText": "キャンセル"
+  },
+  "inputBox": {
+    "placeholder": "入力してください...",
+    "send": "送信",
+    "upload": "画像をアップロード",
+    "emojiTitle": "絵文字",
+    "whisperButton": "ささやき",
+    "whisperTooltip": "ささやき相手を選択",
+    "whisperPanelTitle": "ささやき相手",
+    "whisperSearchPlaceholder": "オンラインメンバーを検索",
+    "whisperEmpty": "該当するメンバーはいません",
+    "whisperPillPrefix": "宛先:",
+    "whisperPlaceholder": "{target} にささやきを送信...",
+    "whisperPlaceholderMultiple": "{count}人にささやく...",
+    "whisperConfirm": "確認",
+    "whisperCancel": "キャンセル",
+    "whisperNoOnline": "このチャンネルにはオンラインのメンバーがいません"
+  },
+  "connectState": {
+    "connecting": "接続中...",
+    "connected": "接続済み",
+    "disconnected": "切断されました",
+    "reconnecting": "{0}秒後に再接続します"
+  },
+  "headerMenu": {
+    "profile": "プロフィール",
+    "about": "アバウト",
+    "lang": "言語設定",
+    "langAuto": "Auto",
+    "notice": "通知",
+    "logout": "ログアウト"
+  },
+  "userProfile": {
+    "title": "プロフィール",
+    "nickname": "ニックネーム",
+    "avatar": "アバター",
+    "brief": "概要",
+    "briefPlaceholder": "自己紹介を書いてみましょう",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "avatarUpload": {
+      "preview": "プレビュー",
+      "back": "戻る",
+      "confirm": "確認",
+      "tooSmall": "この画像は小さすぎます。幅または高さが200以上の画像を選択してください。"
+    }
+  },
+  "dialogLogOut": {
+    "title": "警告",
+    "content": "ログアウトしますか？",
+    "positiveText": "確定",
+    "negativeText": "キャンセル"
+  },
+  "whisper": {
+    "menu": "ささやきを送る",
+    "selfNotAllowed": "自分にささやきを送ることはできません",
+    "userUnknown": "メンバーを特定できません",
+    "sendTo": "[ささやき] {target} へ",
+    "sentTo": "[ささやき] {targets}へ",
+    "from": "[ささやき] {sender} から",
+    "fromMultiple": "[ささやき] {sender}から、{otherUsers}も受信",
+    "generic": "[ささやき] プライベートメッセージ"
+  },
+  "avatarPrompt": {
+    "title": "アバターを設定",
+    "description": "ユニークなアバターをアップロードして、みんなにあなたを覚えてもらいましょう！",
+    "action": "今すぐ設定",
+    "skip": "後で",
+    "badge": "クリックしてアバターを設定"
+  },
+  "emailBindPrompt": {
+    "title": "メールアドレスを登録",
+    "description": "パスワードの復旧とアカウントのセキュリティのため、メールアドレスを登録してください。",
+    "action": "登録する",
+    "dismiss": "今後表示しない",
+    "later": "後で"
+  }
+}

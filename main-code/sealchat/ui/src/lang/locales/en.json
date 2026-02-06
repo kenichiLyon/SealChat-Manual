@@ -1,0 +1,87 @@
+{
+  "headText": "SealChat",
+  "channelListNew": "New Channel",
+  "dialoChannelgNew": {
+    "title": "New Channel",
+    "channelNamePlaceholder": "Enter channel name",
+    "channelNameHint": "Channel name cannot be empty",
+    "positiveText": "OK",
+    "negativeText": "Cancel"
+  },
+  "inputBox": {
+    "placeholder": "type here...",
+    "send": "Send",
+    "upload": "upload image",
+    "emojiTitle": "Emoji",
+    "whisperButton": "Whisper",
+    "whisperTooltip": "Choose a whisper target",
+    "whisperPanelTitle": "Whisper to",
+    "whisperSearchPlaceholder": "Search online members",
+    "whisperEmpty": "No matching members",
+    "whisperPillPrefix": "To:",
+    "whisperPlaceholder": "Whisper to {target}...",
+    "whisperPlaceholderMultiple": "Whisper to {count} people...",
+    "whisperConfirm": "Confirm",
+    "whisperCancel": "Cancel",
+    "whisperNoOnline": "No members are online in this channel"
+  },
+  "connectState": {
+    "connecting": "Connecting...",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "reconnecting": "Reconnecting in {0}s"
+  },
+  "headerMenu": {
+    "profile": "Profile",
+    "about": "About",
+    "lang": "Language",
+    "langAuto": "Auto",
+    "notice": "Notifications",
+    "logout": "Log Out"
+  },
+  "userProfile": {
+    "title": "Profile",
+    "nickname": "Nick",
+    "avatar": "Avatar",
+    "brief": "Intro",
+    "briefPlaceholder": "Say something about yourself",
+    "save": "Save",
+    "cancel": "Cancel",
+    "avatarUpload": {
+      "preview": "Preview",
+      "back": "Back",
+      "confirm": "Confirm",
+      "tooSmall": "This image is too small. Please select an image with at least 200 width or height."
+    }
+  },
+  "dialogLogOut": {
+    "title": "Warning",
+    "content": "Are you sure you want to log out?",
+    "positiveText": "Confirm",
+    "negativeText": "Cancel"
+  },
+  "whisper": {
+    "menu": "Send Whisper",
+    "selfNotAllowed": "You can't whisper to yourself",
+    "userUnknown": "Unable to identify this member",
+    "sendTo": "[Whisper] to {target}",
+    "sentTo": "[Whisper] to {targets}",
+    "from": "[Whisper] from {sender}",
+    "fromMultiple": "[Whisper] from {sender}, {otherUsers} also received",
+    "generic": "[Whisper] private message"
+  },
+  "avatarPrompt": {
+    "title": "Set Your Avatar",
+    "description": "Upload a unique avatar so others can recognize you!",
+    "action": "Set Up Now",
+    "skip": "Maybe Later",
+    "badge": "Click to set avatar"
+  },
+  "emailBindPrompt": {
+    "title": "Bind Email",
+    "description": "Bind your email for password recovery and account security.",
+    "action": "Bind Now",
+    "dismiss": "Don't remind me",
+    "later": "Later"
+  }
+}

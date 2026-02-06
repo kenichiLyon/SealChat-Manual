@@ -1,0 +1,134 @@
+  builtInSealBotEnable: true
+  chatHistoryPersistentDays: -1
+  typingOrderWindowMs: 1000
+  dbUrl: ./data/chat.db
+  domain: 127.0.0.1:3212 # 这里需要填写服务器IP或者域名地址，外置图片显示
+  imageBaseUrl: 127.0.0.1:3212 # 建议填写对外访问域名或 CDN 地址，可填 https://example.com
+  imageCompress: true
+  imageCompressQuality: 85
+  imageSizeLimit: 8192
+  galleryQuotaMB: 100
+  registerOpen: true
+  serveAt: :3212
+  version: 1
+  webUrl: /
+  pageTitle: "海豹尬聊 SealChat"
+  captcha:
+    # 验证码：off 关闭/local 本地生成/turnstile 启动cloudflare turnstile盾，需要配置对应的key
+    signup:
+      mode: local
+      turnstile:
+        siteKey: ""
+        secretKey: ""
+    signin:
+      mode: off
+      turnstile:
+        siteKey: ""
+        secretKey: ""
+    passwordReset:
+      mode: local
+      turnstile:
+        siteKey: ""
+        secretKey: ""
+
+  sqlite:
+    # 是否启用 WAL 日志，提高读写并发
+    wal: true
+    # busy_timeout 毫秒，避免高并发锁冲突，建议 5s-15s
+    busyTimeout: 10000
+    # page cache 大小，单位 KB；负值表示 KB。示例 512000=约512MB
+    cacheSizeKB: 512000
+    # 同步级别 OFF/NORMAL/FULL，NORMAL 在 WAL 下性能/可靠性平衡
+    synchronous: NORMAL
+    # 是否在 DSN 追加 _txlock=immediate，写事务提前拿写锁
+    txLockImmediate: true
+    # 读连接数量，通常设为 CPU 核数；写连接固定串行
+    readConnections: 2
+    # 启动时执行 PRAGMA optimize，用于清理和收敛统计信息
+    optimizeOnInit: true
+
+  audio:
+    storageDir: ./static/audio
+    tempDir: ./data/audio-temp
+    importDir: ./static/audio/import # 读取数据目录导入的扫描路径
+    maxUploadSizeMB: 80
+    allowedMimeTypes:
+      - audio/mpeg
+      - audio/ogg
+      - audio/wav
+      - audio/x-wav
+      - audio/webm
+      - audio/aac
+      - audio/flac
+    enableTranscode: true
+    defaultBitrateKbps: 96
+    alternateBitrates: [] # 已废弃：当前仅保留一份转码产物
+    ffmpegPath: "" # 可填写 ffmpeg 路径；ffprobe 与 ffmpeg 同目录可自动用于时长探测
+    allowNonAdminCreateWorld: true # 是否允许非平台管理员创建新世界
+
+  export:
+    storageDir: ./data/exports
+    downloadBandwidthKBps: 0     # 0 表示不限速
+    downloadBurstKB: 0           # 0 表示使用与带宽相同的突发窗口
+    htmlPageSizeDefault: 100
+    htmlPageSizeMax: 500
+    htmlMaxConcurrency: 2
+
+  storage:
+    mode: local        # local / s3 / auto，默认本地
+    presignTTL: 900
+    maxSizeMB: 64
+    local:
+      uploadDir: ./sealchat-data/upload
+      audioDir: ./sealchat-data/static/audio
+      tempDir: ./data/temp
+      baseUrl: ""   # 若通过 Nginx 暴露本地附件，可填例如 https://files.example.com
+    s3:
+      enabled: true
+      attachmentsEnabled: true   # 附件/图片是否存入 S3
+      audioEnabled: true         # 音频是否存入 S3
+      endpoint: https://cos.ap-region.myqcloud.com
+      region: ap-region
+      bucket: your-bucket-name
+      accessKey: ""       # 留空，改用环境变量 SEALCHAT_S3_ACCESS_KEY
+      secret: ""          # 留空，改用环境变量 SEALCHAT_S3_SECRET_KEY
+      sessionToken: ""
+      pathStyle: false
+      baseUrl: ""         # 可留空，由 endpoint 推导
+      publicBaseUrl: https://cdn.example.com   # 若已绑定 CDN/自定义域，填最终访问域名
+      useSSL: true
+      presignTTL: 900
+      maxSizeMB: 64
+      logLevel: warn
+
+# 数据备份配置
+backup:
+  enabled: true                   # 是否启用自动备份
+  intervalHours: 12               # 备份间隔（小时）
+  retentionCount: 5               # 保留备份数量
+  path: ./backups                 # 备份文件存储路径
+
+# 邮件通知配置（邮件提醒与邮箱验证码共用此 SMTP 配置）
+emailNotification:
+  enabled: false                # 是否启用邮件通知功能
+  checkIntervalSec: 60          # 检查未读消息的间隔（秒）
+  maxPerHour: 5                 # 每用户每小时最大推送次数
+  minDelayMinutes: 10           # 最小延迟时间（分钟）
+  maxDelayMinutes: 30           # 最大延迟时间（分钟）
+  smtp:
+    host: smtp.example.com      # SMTP 服务器地址
+    port: 587                   # SMTP 端口
+    username: your@email.com    # SMTP 用户名
+    password: ""                # 留空，改用环境变量 SEALCHAT_SMTP_PASSWORD
+    fromAddress: noreply@example.com  # 发件人地址
+    fromName: SealChat          # 发件人名称
+    useTLS: true                # 是否使用 TLS
+    skipVerify: false           # 是否跳过证书验证（不建议）
+
+# 邮箱认证配置（注册验证、密码重置等，复用上方 emailNotification.smtp）
+emailAuth:
+  enabled: false                # 是否启用邮箱验证功能
+  codeLength: 6                 # 验证码长度
+  codeTTLSeconds: 300           # 验证码有效期（秒）
+  maxAttempts: 5                # 单个验证码最大尝试次数
+  rateLimitPerIP: 5             # 每 IP 每小时发送上限

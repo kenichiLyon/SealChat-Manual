@@ -1,0 +1,241 @@
+name: Auto Build
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+  pull-requests: read # 需要读取 PR 信息的权限
+
+env:
+  COMMIT_ID: "${{ github.sha }}"
+  NO_BUILD_PROMPT: "no new commits, no need to build."
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/sealchat
+
+jobs:
+  ui-build:
+    name: Build UI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build UI
+        run: |
+          cd ui
+          corepack enable
+          yarn install
+          yarn build-only
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui
+          path: ./ui/dist
+
+  backend-build:
+    name: Build Server
+    runs-on: ubuntu-latest
+    needs: ui-build
+    strategy:
+      matrix:
+        include:
+          - name: linux_amd64
+            goos: linux
+            goarch: amd64
+          - name: linux_arm64
+            goos: linux
+            goarch: arm64
+          - name: windows_amd64
+            goos: windows
+            goarch: amd64
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0 # 获取完整历史以便查找 PR 和 git log
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Get UI resources
+        uses: actions/download-artifact@v4
+        with:
+          name: ui
+          path: ./ui/dist
+
+      - name: Setup Zig
+        uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.11.0
+
+      - name: Build binary
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 1
+        run: |
+          BUILD_DATE=$(date +%Y%m%d)
+          SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          BUILD_VERSION="${BUILD_DATE}-${SHORT_SHA}"
+          if [ "${{ matrix.goos }}" = "linux" ]; then
+            if [ "${{ matrix.goarch }}" = "amd64" ]; then
+              CC="zig cc -target x86_64-linux-musl" go build -o "output/sealchat-server" -trimpath -ldflags "-s -w -linkmode external -extldflags '-static' -X sealchat/utils.BuildVersion=${BUILD_VERSION}" .
+            elif [ "${{ matrix.goarch }}" = "arm64" ]; then
+              CC="zig cc -target aarch64-linux-musl" go build -o "output/sealchat-server" -trimpath -ldflags "-s -w -linkmode external -extldflags '-static' -X sealchat/utils.BuildVersion=${BUILD_VERSION}" .
+            fi
+          elif [ "${{ matrix.goos }}" = "windows" ]; then
+            CC="zig cc -target x86_64-windows-gnu" go build -o "output/sealchat-server.exe" -trimpath -ldflags "-s -w -X sealchat/utils.BuildVersion=${BUILD_VERSION}" .
+          fi
+
+      - name: Prepare package
+        run: |
+          set -euo pipefail
+          rm -rf package
+          mkdir -p package/bin
+
+          if [ "${{ matrix.goos }}" = "linux" ]; then
+            cp output/sealchat-server package/
+            if [ "${{ matrix.goarch }}" = "amd64" ]; then
+              WEBP_DIR="linux-x64"
+            elif [ "${{ matrix.goarch }}" = "arm64" ]; then
+              WEBP_DIR="linux-arm64"
+            else
+              echo "Unsupported arch: ${{ matrix.goarch }}"
+              exit 1
+            fi
+          elif [ "${{ matrix.goos }}" = "windows" ]; then
+            cp output/sealchat-server.exe package/
+            WEBP_DIR="win-x64"
+          else
+            echo "Unsupported OS: ${{ matrix.goos }}"
+            exit 1
+          fi
+
+          mkdir -p "package/bin/${WEBP_DIR}"
+          cp -a "bin/${WEBP_DIR}/." "package/bin/${WEBP_DIR}/"
+          cp bin/LICENSE package/LICENSE
+          cp config.yaml.example package/
+          cp config.docker.yaml.example package/
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: sealchat_${{ github.sha }}_${{ matrix.name }}
+          path: ./package
+
+      - name: Compress files
+        run: |
+          mkdir -p release
+          SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          if [ "${{ matrix.goos }}" = "linux" ]; then
+            tar -czvf release/sealchat_$(date +%Y%m%d)_${SHORT_SHA}_${{ matrix.name }}.tar.gz -C package .
+          elif [ "${{ matrix.goos }}" = "windows" ]; then
+            cd package && zip -r ../release/sealchat_$(date +%Y%m%d)_${SHORT_SHA}_${{ matrix.name }}.zip .
+          fi
+
+      - name: Set slug output
+        id: slug
+        run: |
+          echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> "$GITHUB_OUTPUT"
+          echo "DATE=$(date +%Y%m%d)" >> "$GITHUB_OUTPUT"
+
+      # --- 修改重点开始：获取 PR 信息 ---
+      - name: Generate Release Content
+        id: release_content
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 尝试查找合并后的 PR（状态为 merged，关联当前 commit SHA）
+          PR_DATA=$(gh pr list --search "${{ github.sha }}" --state merged --json title,body,number --limit 1)
+          PR_NUMBER=$(echo "$PR_DATA" | jq -r '.[0].number')
+
+          if [ "$PR_NUMBER" != "null" ] && [ -n "$PR_NUMBER" ]; then
+            echo "Found PR #$PR_NUMBER, using PR info for Release."
+            
+            # 获取标题和内容
+            TITLE=$(echo "$PR_DATA" | jq -r '.[0].title')
+            BODY=$(echo "$PR_DATA" | jq -r '.[0].body')
+            
+            # 设置 Release 标题为 PR 标题
+            echo "RELEASE_NAME=$TITLE" >> $GITHUB_ENV
+            
+            # 设置 Release 内容为 PR 描述
+            echo "RELEASE_BODY<<EOF" >> $GITHUB_ENV
+            echo "$BODY" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+          else
+            echo "No PR found (direct push?), falling back to git log."
+            
+            # 默认标题
+            echo "RELEASE_NAME=${{ steps.slug.outputs.DATE }}-${{ steps.slug.outputs.SHORT_SHA }}" >> $GITHUB_ENV
+            
+            # 默认内容 (Git Log)
+            echo "RELEASE_BODY<<EOF" >> $GITHUB_ENV
+            echo "## 更新说明" >> $GITHUB_ENV
+            git log --format='- %s' $(git describe --tags --abbrev=0 2>/dev/null || git rev-list --max-parents=0 HEAD)..HEAD >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+          fi
+      # --- 修改重点结束 ---
+
+      - name: Upload Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.slug.outputs.DATE }}-${{ steps.slug.outputs.SHORT_SHA }}
+          name: ${{ env.RELEASE_NAME }} # 使用生成的标题
+          body: ${{ env.RELEASE_BODY }} # 使用生成的内容
+          files: |
+            release/sealchat_*_*_${{ matrix.name }}.*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  docker-build:
+    name: Build & Push Docker Image (amd64)
+    runs-on: ubuntu-latest
+    needs: ui-build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get UI resources
+        uses: actions/download-artifact@v4
+        with:
+          name: ui
+          path: ./ui/dist
+
+      - name: Set slug output
+        id: slug
+        run: |
+          echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> "$GITHUB_OUTPUT"
+          echo "DATE=$(date +%Y%m%d)" >> "$GITHUB_OUTPUT"
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Build image
+        run: |
+          docker build \
+            --build-arg BUILD_VERSION="${{ steps.slug.outputs.DATE }}-${{ steps.slug.outputs.SHORT_SHA }}" \
+            -t "${{ env.IMAGE_NAME }}:latest" \
+            -t "${{ env.IMAGE_NAME }}:sha-${{ github.sha }}" \
+            -t "${{ env.IMAGE_NAME }}:${{ steps.slug.outputs.DATE }}-${{ steps.slug.outputs.SHORT_SHA }}" \
+            -f Dockerfile \
+            .
+
+      - name: Push image
+        run: |
+          docker push "${{ env.IMAGE_NAME }}:latest"
+          docker push "${{ env.IMAGE_NAME }}:sha-${{ github.sha }}"
+          docker push "${{ env.IMAGE_NAME }}:${{ steps.slug.outputs.DATE }}-${{ steps.slug.outputs.SHORT_SHA }}"
