@@ -21,7 +21,7 @@ jobs:
       - name: Pnpm install
         run: pnpm install
       - name: Markdownlint check
-        run: pnpm exec markdownlint-cli2 "**/*.md"
+        run: pnpm lint:md
 
   markdownlint-fix:
     runs-on: ubuntu-latest
@@ -39,7 +39,7 @@ jobs:
       - name: Pnpm install
         run: pnpm install
       - name: Markdownlint autocorrect
-        run: pnpm exec markdownlint-cli2 --fix "**/*.md"
+        run: pnpm lint:md:fix
       - name: Ensure no formatting changes
         run: |
           if [ -n "$(git status --porcelain)" ]; then

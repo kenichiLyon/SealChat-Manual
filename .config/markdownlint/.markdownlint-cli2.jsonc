@@ -13,6 +13,8 @@
   "ignores": [
     "node_modules/**",
     "main-code/**",
-    "docs/**"
+    "docs/**",
+    "LICENSE.md",
+    "**/LICENSE.md"
   ]
 }

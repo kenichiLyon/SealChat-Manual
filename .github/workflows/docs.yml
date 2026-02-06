@@ -28,10 +28,12 @@ jobs:
         run: pnpm install
       - name: Build docs
         run: pnpm docs:build
+      - name: Add .nojekyll
+        run: touch .vitepress/dist/.nojekyll
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v4
         with:
           target_branch: gh-pages
-          build_dir: docs
+          build_dir: .vitepress/dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
