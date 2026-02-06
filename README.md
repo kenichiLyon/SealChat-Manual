@@ -40,7 +40,7 @@ pnpm docs:build
 
 ## 部署
 
-**您可以通过 fork 本仓库并按照如下方式自动部署到您的 GitHub Pages**
+你可以通过 fork 本仓库并按以下方式自动部署到 GitHub Pages。
 
 ### GitHub Pages（`gh-pages` 分支）
 
